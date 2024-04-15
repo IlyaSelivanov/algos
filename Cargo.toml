@@ -9,3 +9,8 @@ edition = "2021"
 
 [dev-dependencies]
 rand = "0.8.4"
+criterion = "0.5.1"
+
+[[bench]]
+name = "sorting_benchmarks"
+harness = false
