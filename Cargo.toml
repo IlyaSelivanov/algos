@@ -5,6 +5,9 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
 [dependencies]
 
 [dev-dependencies]
@@ -13,4 +16,8 @@ criterion = "0.5.1"
 
 [[bench]]
 name = "sorting_benchmarks"
+harness = false
+
+[[bench]]
+name = "searching_benchmarks"
 harness = false
