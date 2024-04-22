@@ -1,3 +1,5 @@
+use crate::number::Number;
+
 /// Finds the maximum subarray that crosses the midpoint of the given array.
 ///
 /// This function takes an array `arr`, the indices `low`, `mid`, and `high` that define the
@@ -17,17 +19,12 @@
 /// * `max_left` - The starting index of the maximum subarray that crosses the midpoint.
 /// * `max_right` - The ending index of the maximum subarray that crosses the midpoint.
 /// * `sum` - The sum of the elements in the maximum subarray that crosses the midpoint.
-fn find_cross_subarray<T: Ord + Copy>(
-    arr: &[T],
-    low: usize,
-    mid: usize,
-    high: usize,
-) -> (usize, usize, i32)
+fn find_cross_subarray<T>(arr: &[T], low: usize, mid: usize, high: usize) -> (usize, usize, T)
 where
-    i32: std::ops::AddAssign<T>,
+    T: Ord + Copy + Number + std::ops::AddAssign + std::ops::Add<Output = T>,
 {
-    let mut left_sum = i32::MIN;
-    let mut sum: i32 = 0;
+    let mut left_sum: T = Number::min();
+    let mut sum: T = Number::zero();
     let mut max_left = 0;
     for i in (low..=mid).rev() {
         sum += arr[i];
@@ -37,8 +34,8 @@ where
         }
     }
 
-    let mut right_sum = i32::MIN;
-    let mut sum = 0;
+    let mut right_sum: T = Number::min();
+    let mut sum: T = Number::zero();
     let mut max_right = 0;
     for (i, item) in arr.iter().enumerate().take(high + 1).skip(mid + 1) {
         sum += *item;
@@ -95,17 +92,12 @@ where
 ///     
 /// * [Introduction to Algorithms (3rd ed.)](https://mitpress.mit.edu/books/introduction-algorithms-third-edition)
 /// * [Wikipedia - Maximum subarray problem](https://en.wikipedia.org/wiki/Maximum_subarray_problem)
-pub fn find_maximum_subarray<T: Ord + Copy>(
-    arr: &[T],
-    low: usize,
-    high: usize,
-) -> (usize, usize, i32)
+pub fn find_maximum_subarray<T>(arr: &[T], low: usize, high: usize) -> (usize, usize, T)
 where
-    i32: std::convert::From<T>,
-    i32: std::ops::AddAssign<T>,
+    T: Ord + Copy + Number + std::ops::AddAssign + std::ops::Add<Output = T>,
 {
     if low == high {
-        return (low, high, arr[low].into());
+        return (low, high, arr[low]);
     }
 
     let mid = (low + high) / 2;
