@@ -113,3 +113,72 @@ where
         (cross_low, cross_high, cross_sum)
     }
 }
+
+/// Finds the maximum subarray using Kadane's algorithm.
+///
+/// This function takes an array `arr` and returns a tuple containing the indices of the maximum
+/// subarray and the sum of its elements. The maximum subarray is defined as the contiguous
+/// subarray with the largest sum.
+///
+/// # Arguments
+///
+/// * `arr` - The array to search for the maximum subarray.
+///
+/// # Returns
+///
+/// A tuple `(start, end, sum)` where:
+/// * `start` - The starting index of the maximum subarray.
+/// * `end` - The ending index of the maximum subarray.
+/// * `sum` - The sum of the elements in the maximum subarray.
+///
+/// # Examples
+///
+/// ```
+/// use algos::searching::search_subarray::max_subarray_kad;
+///
+/// let numbers = [4, -2, 3, -1, 2, 1, -5, 4];
+/// let (start, end, sum) = max_subarray_kad(&numbers);
+/// assert_eq!(start, 0);
+/// assert_eq!(end, 5);
+/// assert_eq!(sum, 7);
+/// ```
+///
+/// # Note
+///
+/// Kadane's algorithm is an efficient algorithm for finding the maximum subarray. It iterates
+/// through the array, keeping track of the maximum sum found so far and the current sum. If the
+/// current sum becomes negative, it is reset to zero, as a negative sum would only decrease the
+/// maximum sum. The maximum sum found is the sum of the elements in the maximum subarray. The time
+/// complexity of this algorithm is O(n), where n is the number of elements in the array.
+pub fn find_maximum_subarray_kad<T>(arr: &[T]) -> (usize, usize, T)
+where
+    T: Ord
+        + Copy
+        + std::ops::AddAssign
+        + std::ops::Add<Output = T>
+        + Default
+        + std::cmp::PartialOrd,
+{
+    let mut max_sum = arr[0];
+    let mut current_sum = arr[0];
+    let mut start = 0;
+    let mut end = 0;
+    let mut temp_start = 0;
+
+    for (i, &item) in arr.iter().enumerate().skip(1) {
+        if item > current_sum + item {
+            current_sum = item;
+            temp_start = i;
+        } else {
+            current_sum += item;
+        }
+
+        if current_sum > max_sum {
+            max_sum = current_sum;
+            start = temp_start;
+            end = i;
+        }
+    }
+
+    (start, end, max_sum)
+}

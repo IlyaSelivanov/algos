@@ -1,4 +1,4 @@
-use algos::searching::search_subarray::find_maximum_subarray;
+use algos::searching::search_subarray::{find_maximum_subarray, find_maximum_subarray_kad};
 use criterion::{criterion_group, criterion_main, Criterion};
 use rand::Rng;
 
@@ -30,5 +30,16 @@ fn benchmark_find_max_subarray(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, benchmark_find_max_subarray);
+fn benchmark_find_max_subarray_kad(c: &mut Criterion) {
+    let arr = generate_data(ARR_SIZE);
+    c.bench_function("find_maximum_subarray_kad", |b| {
+        b.iter(|| find_maximum_subarray_kad(&arr))
+    });
+}
+
+criterion_group!(
+    benches,
+    benchmark_find_max_subarray,
+    benchmark_find_max_subarray_kad
+);
 criterion_main!(benches);
